@@ -6,7 +6,10 @@ const passport = require('passport')
 const app = express()
 require('dotenv').config()
 const cookieSession = require('cookie-session')
-const { checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth')
+const config = require('config')
+const serverConfig = config.get('server')
+const mainRouter = require('./routes/main.router')
+const usersRouter = require('./routes/users.router')
 
 const cookieEncryptionKey = process.env.COOKIE_ENCRYPTION_KEY
 app.use(
@@ -53,48 +56,8 @@ mongoose
 
 app.use('/static', express.static(join(__dirname, 'public')))
 
-app.get('/', checkAuthenticated, (req, res) => {
-  res.render('index')
-})
-
-app.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login')
-})
-
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) return next(err)
-    if (!user) return res.json({ msg: info })
-    req.login(user, (err) => {
-      if (err) return next(err)
-      res.redirect('/')
-    })
-  })(req, res, next)
-})
-
-app.post('/logout', (req, res, next) => {
-  req.logOut((err) => {
-    if (err) return next(err)
-    res.redirect('/login')
-  })
-})
-
-app.get('/signup', checkNotAuthenticated, (req, res) => {
-  res.render('signup')
-})
-
-app.post('/signup', async (req, res) => {
-  // user 객체 생성
-  const user = new User(req.body)
-  try {
-    await user.save()
-    return res.status(200).json({
-      success: true,
-    })
-  } catch (error) {
-    console.error(error)
-  }
-})
+app.use('/', mainRouter)
+app.use('/auth', usersRouter)
 
 const port = 4000
 app.listen(port, () => {
