@@ -6,6 +6,10 @@
 
 Node v.18.17.0
 
+master branch = jwt, passport 구현
+
+crud branch = CRUD 구현
+
 ### development
 index.js 는 기본적인 jwt 토큰 로그인 방식
 
