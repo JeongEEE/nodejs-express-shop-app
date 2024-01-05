@@ -1,5 +1,5 @@
 {
-  "name": "express-auth-app",
+  "name": "express-shop-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,24 +8,31 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
-  "author": "",
+  "author": "gjkim <tbtbtb156@naver.com>",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "config": "^3.3.9",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-fileupload": "^1.4.3",
+    "express-session": "^1.17.3",
+    "fs-extra": "^11.2.0",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
+    "mkdirp": "^3.0.1",
     "mongoose": "^8.0.3",
     "nodemon": "^3.0.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "resize-img": "^2.0.0"
   },
   "devDependencies": {
     "husky": "^8.0.3",
