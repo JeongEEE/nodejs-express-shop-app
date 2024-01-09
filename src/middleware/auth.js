@@ -12,7 +12,17 @@ function checkNotAuthenticated(req, res, next) {
   next()
 }
 
+function checkAdmin(req, res, next) {
+  if (req.isAuthenticated() && res.locals.currentUser.admin === 1) {
+    next()
+  } else {
+    req.flash('error', '관리자로 로그인하십니오.')
+    res.redirect('back')
+  }
+}
+
 module.exports = {
+  checkAdmin,
   checkAuthenticated,
   checkNotAuthenticated,
 }

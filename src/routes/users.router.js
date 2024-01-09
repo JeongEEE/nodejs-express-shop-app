@@ -10,7 +10,7 @@ usersRouter.post('/login', (req, res, next) => {
     if (!user) return res.json({ msg: info })
     req.login(user, (err) => {
       if (err) return next(err)
-      res.redirect('/')
+      res.redirect('/products')
     })
   })(req, res, next)
 })

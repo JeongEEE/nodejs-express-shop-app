@@ -6,6 +6,9 @@ const passport = require('passport')
 const app = express()
 require('dotenv').config()
 const cookieSession = require('cookie-session')
+const flash = require('connect-flash')
+const methodOverride = require('method-override')
+const fileUpload = require('express-fileupload')
 const config = require('config')
 const serverConfig = config.get('server')
 const mainRouter = require('./routes/main.router')
@@ -14,6 +17,7 @@ const productsRouter = require('./routes/products.router')
 const cartRouter = require('./routes/cart.router')
 const adminCategoryRouter = require('./routes/admin-categories.router')
 const adminProductsRouter = require('./routes/admin-products.router')
+const port = 4000
 
 const cookieEncryptionKey = process.env.COOKIE_ENCRYPTION_KEY
 app.use(
@@ -37,6 +41,10 @@ app.use((request, response, next) => {
   next()
 })
 
+app.use(flash())
+app.use(methodOverride('_method'))
+app.use(fileUpload())
+
 app.use(passport.initialize())
 app.use(passport.session())
 require('./config/passport')
@@ -58,7 +66,15 @@ mongoose
     console.log(err)
   })
 
-app.use('/static', express.static(join(__dirname, 'public')))
+app.use(express.static(join(__dirname, 'public')))
+
+app.use((req, res, next) => {
+  res.locals.cart = req.session.cart
+  res.locals.error = req.flash('error')
+  res.locals.success = req.flash('success')
+  res.locals.currentUser = req.user
+  next()
+})
 
 app.use('/', mainRouter)
 app.use('/auth', usersRouter)
@@ -67,7 +83,11 @@ app.use('/admin/products', adminProductsRouter)
 app.use('/products', productsRouter)
 app.use('/cart', cartRouter)
 
-const port = 4000
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
+  res.send(err.message || '에러가 났습니다.')
+})
+
 app.listen(port, () => {
   console.log('Server Start - Port =', port)
 })

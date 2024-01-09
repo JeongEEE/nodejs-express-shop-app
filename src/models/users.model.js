@@ -15,6 +15,16 @@ const userSchema = mongoose.Schema({
     unique: true,
     sparse: true,
   },
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  admin: {
+    type: Number,
+    // 0 => 일반유저, 1=>관리자유저
+    default: 0,
+  },
 })
 
 const saltRounds = 10
